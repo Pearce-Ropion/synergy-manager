@@ -1,3 +1,13 @@
+CREATE TABLE users (
+    id INT NOT NULL AUTO_INCREMENT,
+    uuid VARCHAR(40) NOT NULL,
+    name VARCHAR(30) NOT NULL,
+    email VARCHAR(40) NOT NULL,
+    password BINARY(60) NOT NULL,
+    family INT,
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE usages (
 	id INT NOT NULL AUTO_INCREMENT,
 	uuid VARCHAR(40) NOT NULL,
