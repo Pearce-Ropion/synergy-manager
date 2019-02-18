@@ -2,7 +2,6 @@ import paho.mqtt.client as mqtt
 import json
 import database as db
 
- 
 MQTT_SERVER = "localhost"
 MQTT_PATH = "hub_channel"
  
