@@ -1,16 +1,18 @@
+-- Stores information about individual users
 CREATE TABLE users (
     id INT NOT NULL AUTO_INCREMENT,
-    uuid VARCHAR(40) NOT NULL,
+    userID VARCHAR(40) NOT NULL,
     name VARCHAR(30) NOT NULL,
     email VARCHAR(40) NOT NULL,
     password BINARY(60) NOT NULL,
-    family INT,
+    family_size INT,
     PRIMARY KEY (id)
 );
 
+-- Stores channel usage data where each channel's usage is associated with its device's ID
 CREATE TABLE usages (
 	id INT NOT NULL AUTO_INCREMENT,
-	uuid VARCHAR(40) NOT NULL,
+	deviceID VARCHAR(40) NOT NULL,
 	time INT,
 	ch1 DOUBLE(5,3),
 	ch2 DOUBLE(5,3),
@@ -27,10 +29,10 @@ CREATE TABLE usages (
 	PRIMARY KEY (id)
 );
 
-
+-- Stores device name and deviceID to channelID association
 CREATE TABLE devices (
 	id INT NOT NULL AUTO_INCREMENT,
-	uuid VARCHAR(40) NOT NULL,
+	deviceID VARCHAR(40) NOT NULL,
 	name VARCHAR(20),
 	ch1 VARCHAR(40),
 	ch2 VARCHAR(40),
@@ -47,6 +49,7 @@ CREATE TABLE devices (
 	PRIMARY KEY (id)
 );
 
+-- Stores channelID to channel name association
 CREATE TABLE channels (
 	id INT NOT NULL AUTO_INCREMENT,
 	deviceID VARCHAR(40) NOT NULL,
@@ -55,6 +58,7 @@ CREATE TABLE channels (
 	PRIMARY KEY (id)
 );
 
+-- Stores which UUIDs (could be deviceID, channelID or groupID) are associated with each group
 CREATE TABLE groupings (
 	id INT NOT NULL AUTO_INCREMENT,
 	groupID VARCHAR(40) NOT NULL,
@@ -62,6 +66,7 @@ CREATE TABLE groupings (
 	PRIMARY KEY (id)
 );
 
+-- Stores group IDs with their associated name
 CREATE TABLE groups (
 	id INT NOT NULL AUTO_INCREMENT,
 	groupID VARCHAR(40) NOT NULL,
