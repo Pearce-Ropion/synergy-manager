@@ -1,5 +1,6 @@
-import paho.mqtt.client as mqtt
 import json
+
+import paho.mqtt.client as mqtt
 import database as db
 
 MQTT_SERVER = "localhost"
