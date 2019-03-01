@@ -22,7 +22,7 @@ ALTER TABLE `users` ADD UNIQUE (`userID`);
 CREATE TABLE `usages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `deviceID` varchar(36) NOT NULL,
-  `time` int(11) NOT NULL,
+  `time` bigint(13) NOT NULL,
   `ch1` double(5,3) DEFAULT NULL,
   `ch2` double(5,3) DEFAULT NULL,
   `ch3` double(5,3) DEFAULT NULL,
@@ -141,3 +141,9 @@ VALUES
 INSERT INTO `users` (`userID`, `name`, `email`, `password`, `family_size`)
 VALUES
 	('f6ffcdaa-48fb-4782-9ed4-c5cec790123b', 'Synergy Admin', 'admin@synergy.com', '$2a$10$JD/SrONlfEdj/1WrQXIX1uQCRHvj.rJ9y3uas3TlrGrD2YRjRk052', 2);
+
+INSERT INTO `usages` (`deviceID`, `time`, `ch1`, `ch2`, `ch3`, `ch4`, `ch5`, `ch6`, `ch7`, `ch8`)
+VALUES
+    ('75479fe4-6c70-437a-bf10-731cbd58fbe9', UNIX_TIMESTAMP(NOW(3))*1000, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1),
+    ('67c3e144-d7c0-4f60-a8fe-04552d55e3b0', UNIX_TIMESTAMP(NOW(3))*1000 + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1),
+    ('510460ed-326e-401a-b123-0a34c20269ec', UNIX_TIMESTAMP(NOW(3))*1000 + 2, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1, (RAND() * (16 - 1)) + 1);
