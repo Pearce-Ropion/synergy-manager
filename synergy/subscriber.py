@@ -1,7 +1,7 @@
 import json
 
 import paho.mqtt.client as mqtt
-import database as db
+from .database.usages import store_usage
 
 MQTT_SERVER = "localhost"
 MQTT_PATH = "hub_channel"
@@ -18,7 +18,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
 	message = msg.payload.decode('utf-8')
 	data = json.loads(message)
-	db.store_usage(data)
+	store_usage(data)
     # more callbacks, etc
  
 client = mqtt.Client()
