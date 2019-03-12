@@ -12,11 +12,10 @@ def store_usage(data):
 
     try:
         deviceID = data.get('uuid', '0')
-
-        insert_channels(deviceID)
-
         timestamp = data.get('epoch', 0)
         currents = data.get('channels', [])
+
+        insert_channels(deviceID, len(currents))
 
         col_list = ['deviceID', 'time', 'ch1', 'ch2', 'ch3', 'ch4',
                     'ch5', 'ch6', 'ch7', 'ch8', 'ch9', 'ch10', 'ch11', 'ch12']
