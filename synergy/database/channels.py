@@ -32,7 +32,7 @@ def insert_channels(deviceID):
             device_insert_variables.append(channelID)
 
             try:
-                channel_insert_variables = [deviceID, channelID, i]
+                channel_insert_variables = [deviceID, channelID, i + 1]
                 channel_col_list = ['deviceID', 'channelID', 'position']
                 
                 channel_query_placeholders = ', '.join(['%s'] * len(channel_insert_variables))
