@@ -1,11 +1,22 @@
 import json
 
 from .database.usages import store_usage
+from .database.devices import intiialize_device
 from .mqtt_config import MQTT_PATH
+
+def null_action(data):
+    return
+
+def switch_action(action_type):
+    actions = {
+        'usage': store_usage,
+        'intiialize': intiialize_device,
+    }
+    return actions.get(action_type, null_action)
  
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
-    print("Connected with result code "+str(rc))
+    print('Connected with result code ' + str(rc))
  
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
@@ -15,5 +26,9 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
 	message = msg.payload.decode('utf-8')
 	data = json.loads(message)
-	store_usage(data)
-    # more callbacks, etc
+
+    action_type = data.get('type', None)
+    callback = switch_action(action_type)
+    
+    payload = data.get('payload', {})
+    callback(payload)
