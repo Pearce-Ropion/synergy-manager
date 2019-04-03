@@ -1,33 +1,26 @@
 from ..reporter import reportError, isError
 from .database import connectDB, closeDB
 
-from .channels import insert_channels
-
-
 def store_usage(data):
     conn, cursor = connectDB()
 
     insert_variables = []
-    channels = [None] * 12
 
     try:
-        deviceID = data.get('uuid', '0')
-        timestamp = data.get('epoch', 0)
-        currents = data.get('channels', [])
+        deviceID = data.get('deviceID', None)
+        channelID = data.get('channelID', None)
+        if (deviceID is None or channelID is None):
+            return
 
-        insert_channels(deviceID, len(currents))
+        timestamp = datetime(1970, 1, 1) + timedelta(milliseconds = data.get('timestamp', 0))
+        amperage = data.get('amps', 0)
 
-        col_list = ['deviceID', 'time', 'ch1', 'ch2', 'ch3', 'ch4',
-                    'ch5', 'ch6', 'ch7', 'ch8', 'ch9', 'ch10', 'ch11', 'ch12']
+        col_list = ['deviceID', 'channelID', 'time', 'amps']
 
         insert_variables.append(deviceID)
+        insert_variables.append(channelID)
         insert_variables.append(timestamp)
-
-        for i in range(len(currents)):
-            channels[i] = currents[i]
-
-        for channel in channels:
-            insert_variables.append(channel)
+        insert_variables.append(amperage)
 
         query_placeholders = ', '.join(['%s'] * len(insert_variables))
         query_columns = ', '.join(col_list)
@@ -40,9 +33,9 @@ def store_usage(data):
             closeDB(conn, cursor)
 
         except Exception as error:
-            reportError('SQL Error: Unable to insert channel usage data for the device with the specified ID: {}'.format(deviceID), error)
+            reportError('SQL Error: Unable to insert channel usage', error)
             closeDB(conn, cursor)
 
     except Exception as error:
-        reportError('An error occured inserting channel usage data for the device with the specified ID: {}'.format(deviceID), error)
+        reportError('An error occured inserting channel usage data', error)
         closeDB(conn, cursor)
