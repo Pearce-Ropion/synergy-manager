@@ -1,9 +1,17 @@
 from uuid import uuid4 as uuidv4
+from datetime import datetime
 
 from ..reporter import reportError, isError
 from .database import connectDB, closeDB
 
-def insert_channels(deviceID, channel_count):
+epoch = datetime.datetime(1970,1,1)
+
+def initialize_device(data):
+    deviceID = data.get('deviceID', None)
+    if deviceID is None:
+        reportError('An error occurred getting the deviceID from the monitoring device')
+        return
+
     conn, cursor = connectDB()
 
     # Check if the device has already been added to the database
@@ -16,24 +24,28 @@ def insert_channels(deviceID, channel_count):
             return
 
     except Exception as error:
-        reportError('SQL Error: Unable to get channels for the device with the specified ID: {}'.format(deviceID), error)
+        reportError('SQL Error: Unable to check for device existance', error)
         closeDB(conn, cursor)
         return
 
 
     # If not add it and its channels
     try:
-        device_insert_variables = [deviceID, channel_count]
-        device_col_list = ['deviceID', 'channels', 'ch1', 'ch2', 'ch3', 'ch4', 'ch5',
-                    'ch6', 'ch7', 'ch8', 'ch9', 'ch10', 'ch11', 'ch12']
+        channels = data.get('channels', [])
 
-        for i in range(channel_count):
-            channelID = str(uuidv4())
-            device_insert_variables.append(channelID)
+        # see https://stackoverflow.com/a/25722275
+        now = datetime.datetime.now()
+        timestamp_micros = (now - epoch) // datetime.timedelta(microseconds=1)
+        timestamp_millis = timestamp_micros // 1000
+
+        device_insert_variables = [deviceID, len(channels), timestamp_millis, timestamp_millis]
+        device_col_list = ['deviceID', 'channels', 'created', 'updated']
+
+        for channelID in channels:
 
             try:
-                channel_insert_variables = [deviceID, channelID, i + 1]
-                channel_col_list = ['deviceID', 'channelID', 'position']
+                channel_insert_variables = [deviceID, channelID, timestamp_millis, timestamp_millis]
+                channel_col_list = ['deviceID', 'channelID', 'created', 'updated']
                 
                 channel_query_placeholders = ', '.join(['%s'] * len(channel_insert_variables))
                 channel_query_columns = ', '.join(channel_col_list)
@@ -44,12 +56,12 @@ def insert_channels(deviceID, channel_count):
                     cursor.execute(channel_query, channel_insert_variables)
 
                 except Exception as error:
-                    reportError('SQL Error: Unable to insert new channel into channels table with ID: {}'.format(channelID), error)
+                    reportError('SQL Error: Unable to insert new channel', error)
                     closeDB(conn, cursor)
                     return
 
             except Exception as error:
-                reportError('An error occured inserting a new channel into channels table with ID: {}'.format(channelID), error)
+                reportError('An error occured inserting a new channel', error)
                 closeDB(conn, cursor)
                 return
 
@@ -65,12 +77,12 @@ def insert_channels(deviceID, channel_count):
             cursor.execute(device_query, device_insert_variables)
 
         except Exception as error:
-            reportError('SQL Error: Unable to insert channel IDs for the device with the specified ID: {}'.format(deviceID), error)
+            reportError('SQL Error: Unable to insert new device', error)
             closeDB(conn, cursor)
             return
 
     except Exception as error:
-        reportError('An error occured inserting the channels for the device with the specified ID: {}'.format(deviceID), error)
+        reportError('An error occured inserting a new device', error)
         closeDB(conn, cursor)
         return
 
