@@ -1,5 +1,5 @@
 from uuid import uuid4 as uuidv4
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from ..reporter import reportError, isError
 from .database import connectDB, closeDB
@@ -35,7 +35,7 @@ def initialize_device(data):
 
         # see https://stackoverflow.com/a/25722275
         now = datetime.now()
-        timestamp_micros = (now - epoch) // datetime.timedelta(microseconds=1)
+        timestamp_micros = (now - epoch) // timedelta(microseconds=1)
         timestamp_millis = timestamp_micros // 1000
 
         device_insert_variables = [deviceID, len(channels), timestamp_millis, timestamp_millis]
@@ -64,9 +64,6 @@ def initialize_device(data):
                 reportError('An error occured inserting a new channel', error)
                 closeDB(conn, cursor)
                 return
-
-        for _ in range(12 - channel_count):
-            device_insert_variables.append(None)
 
         device_query_placeholders = ', '.join(['%s'] * len(device_insert_variables))
         device_query_columns = ', '.join(device_col_list)
