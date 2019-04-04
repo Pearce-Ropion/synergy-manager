@@ -1,7 +1,7 @@
 import json
 
 from .database.usages import store_usage
-from .database.devices import intiialize_device
+from .database.devices import initialize_device
 from .mqtt_config import MQTT_PATH
 
 def null_action(data):
@@ -10,7 +10,7 @@ def null_action(data):
 def switch_action(action_type):
     actions = {
         'usage': store_usage,
-        'intiialize': intiialize_device,
+        'intiialize': initialize_device,
     }
     return actions.get(action_type, null_action)
  
@@ -24,11 +24,11 @@ def on_connect(client, userdata, flags, rc):
  
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-	message = msg.payload.decode('utf-8')
-	data = json.loads(message)
+    message = msg.payload.decode('utf-8')
+    data = json.loads(message)
 
     action_type = data.get('type', None)
     callback = switch_action(action_type)
-    
+
     payload = data.get('payload', {})
     callback(payload)

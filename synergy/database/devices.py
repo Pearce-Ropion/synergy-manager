@@ -4,7 +4,7 @@ from datetime import datetime
 from ..reporter import reportError, isError
 from .database import connectDB, closeDB
 
-epoch = datetime.datetime(1970,1,1)
+epoch = datetime(1970,1,1)
 
 def initialize_device(data):
     deviceID = data.get('deviceID', None)
@@ -34,7 +34,7 @@ def initialize_device(data):
         channels = data.get('channels', [])
 
         # see https://stackoverflow.com/a/25722275
-        now = datetime.datetime.now()
+        now = datetime.now()
         timestamp_micros = (now - epoch) // datetime.timedelta(microseconds=1)
         timestamp_millis = timestamp_micros // 1000
 
