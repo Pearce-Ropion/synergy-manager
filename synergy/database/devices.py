@@ -20,6 +20,7 @@ def initialize_device(data):
         cursor.execute(query, (deviceID,))
         data = cursor.fetchall()
         if data:
+            print("EXISTS")
             closeDB(conn, cursor)
             return
 
@@ -71,6 +72,7 @@ def initialize_device(data):
         try:
             device_query = ''' INSERT INTO devices (%s) VALUES (%s) ''' % (
                 device_query_columns, device_query_placeholders)
+            print(device_query)
             cursor.execute(device_query, device_insert_variables)
 
         except Exception as error:
