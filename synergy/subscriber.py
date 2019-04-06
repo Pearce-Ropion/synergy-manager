@@ -10,7 +10,7 @@ def null_action(data):
 def switch_action(action_type):
     actions = {
         'usage': store_usage,
-        'intiialize': initialize_device,
+        'initialize': initialize_device,
     }
     return actions.get(action_type, null_action)
  
