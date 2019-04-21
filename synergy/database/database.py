@@ -1,4 +1,4 @@
-from uuid import uuid4 as uuidv4
+	from uuid import uuid4 as uuidv4
 
 import mysql.connector as mariadb
 
@@ -15,7 +15,7 @@ config = {
 
 def connectDB():
     try:
-        conn = mariadb.connect(**config)
+        conn = mariadb.connect(pool_name = "mypool", pool_size = 10, **config)
         cursor = conn.cursor(dictionary=True)
         conn.autocommit = True
 
