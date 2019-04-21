@@ -1,8 +1,11 @@
 import paho.mqtt.client as mqtt
+import json
+from datetime import datetime
 
 from .mqtt_config import MQTT_SERVER, MQTT_PORT
 from .subscriber import on_connect, on_message
 from .reporter import reportError
+from .modeling.svm_handler import start_svm
 
 
 def main():
@@ -14,6 +17,8 @@ def main():
         client.on_message = on_message
 
         client.connect(MQTT_SERVER, MQTT_PORT, 60)
+
+        start_svm()
 
         # Blocking call that processes network traffic, dispatches callbacks and
         # handles reconnecting.
