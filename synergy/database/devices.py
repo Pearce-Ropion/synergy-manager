@@ -43,11 +43,13 @@ def initialize_device(data):
         device_insert_variables = [deviceID, len(channels), timestamp, timestamp]
         device_col_list = ['deviceID', 'channels', 'created', 'updated']
 
+        position = 1
         for channelID in channels:
-
+            
             try:
-                channel_insert_variables = [deviceID, channelID, timestamp, timestamp]
-                channel_col_list = ['deviceID', 'channelID', 'created', 'updated']
+                name = 'Channel {}'.format(position)
+                channel_col_list = ['deviceID', 'channelID', 'position', 'name', 'created', 'updated']
+                channel_insert_variables = [deviceID, channelID, position, name, timestamp, timestamp]
                 
                 channel_query_placeholders = ', '.join(['%s'] * len(channel_insert_variables))
                 channel_query_columns = ', '.join(channel_col_list)
@@ -61,6 +63,8 @@ def initialize_device(data):
                     reportError('SQL Error: Unable to insert new channel', error)
                     closeDB(conn, cursor)
                     return
+
+                position += 1
 
             except Exception as error:
                 reportError('An error occured inserting a new channel', error)
