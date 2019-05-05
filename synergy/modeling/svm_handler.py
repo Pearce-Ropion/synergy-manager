@@ -3,9 +3,10 @@ import schedule
 import datetime
 import time
 import os
-from svm import gen_alert_model
-from synergy.database.database import connectDB, closeDB
-from synergy.reporter import reportError, isError
+
+from .svm import gen_alert_model
+from ..database.database import connectDB, closeDB
+from ..reporter import reportError, isError
 
 def start_svm():
     schedule.every().week.at("03:00").do(loopSVM)

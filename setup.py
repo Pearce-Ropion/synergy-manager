@@ -11,6 +11,9 @@ with open(os.path.join(here, 'CHANGES.md')) as f:
 requires = [
     'mysql-connector-python',
     'paho-mqtt',
+    'schedule',
+    'pandas',
+    'sklearn',
 ]
 
 tests_require = [
