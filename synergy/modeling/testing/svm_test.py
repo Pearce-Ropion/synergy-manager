@@ -3,10 +3,10 @@ import datetime
 import time
 import os
 
-from .modeling.svm import gen_alert_model, pred_alert
-from .database.database import connectDB, closeDB
-from .reporter import reportError, isError
-
+from ..svm import gen_alert_model, pred_alert
+from ...database.database import connectDB, closeDB
+from ...reporter import reportError, isError
+ 
 def trim_time(data):
     result = []
     for res in data:
