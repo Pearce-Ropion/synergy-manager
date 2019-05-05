@@ -1,8 +1,9 @@
 import pandas as pd
 import pickle
 from sklearn import svm
-from svm_handler import trim_time
-from send_sms import unusual_msg
+
+from .svm_handler import trim_time
+from .send_sms import unusual_msg
 from ..database.database import connectDB, closeDB
 from ..reporter import reportError, isError
 
@@ -26,10 +27,10 @@ def pred_alert(chID, test):
     time = test['time']
     outliers = clf.predict([[amps, time]])
     if outliers[0] == -1:
-        gen_un_alert(chID)
+        generate_alert(chID)
 
 
-def gen_un_alert(chID):
+def generate_alert(chID):
     # get channel name
     try:
         conn, cursor = connectDB()
@@ -40,12 +41,5 @@ def gen_un_alert(chID):
         reportError('SQL Error: Unable to retrieve channel name', error)
         closeDB(conn, cursor)
 
-    try:
-        query = ''' SELECT phone FROM users'''
-        cursor.execute(query, chID)
-        phone = cursor.fetchall()
-    except Exception as error:
-        reportError('SQL Error: Unable to retrieve channel name', error)
-    
     closeDB(conn, cursor)
-    unusual_msg(name[0], phone)
+    unusual_msg(name[0])

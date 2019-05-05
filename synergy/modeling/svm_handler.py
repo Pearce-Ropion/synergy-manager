@@ -9,7 +9,7 @@ from ..database.database import connectDB, closeDB
 from ..reporter import reportError, isError
 
 def start_svm():
-    schedule.every().week.at("03:00").do(loopSVM)
+    schedule.every().week.at('03:00').do(loopSVM)
 
 
 def trim_time(data):
@@ -21,8 +21,8 @@ def trim_time(data):
         currentUnix = time.mktime(curr.timetuple())
 
         result.append({
-            "amps": res["amps"],
-            "time": int(currentUnix - currentYMD)
+            'amps': res['amps'],
+            'time': int(currentUnix - currentYMD)
         })
 
     return result

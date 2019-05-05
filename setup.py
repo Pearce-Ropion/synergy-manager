@@ -14,6 +14,7 @@ requires = [
     'schedule',
     'pandas',
     'sklearn',
+    'twilio',
 ]
 
 tests_require = [
@@ -24,7 +25,7 @@ tests_require = [
 
 setup(
     name='synergy-manager',
-    version='0.0',
+    version='0.0.0',
     description='Synergy Hub Manager',
     long_description=README + '\n\n' + CHANGES,
     classifiers=[
