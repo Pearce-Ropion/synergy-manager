@@ -15,7 +15,7 @@ config = {
 
 def connectDB():
     try:
-        conn = mariadb.connect(**config)
+        conn = mariadb.connect(pool_name = "synergy", pool_size = 10, **config)
         cursor = conn.cursor(dictionary=True)
         conn.autocommit = True
 
