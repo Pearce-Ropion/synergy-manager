@@ -3,7 +3,7 @@ import schedule
 from datetime import datetime
 from .database.usages import store_usage
 from .database.devices import initialize_device
-from .mqtt_config import MQTT_PATH
+from .mqtt_config import MQTT_PATH, MQTT_SERVER, MQTT_PORT
 from .modeling.svm import pred_alert
 from .database.database import connectDB, closeDB
 from .reporter import reportError, isError
@@ -51,7 +51,7 @@ def switch_action(action_type):
  
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
-    print('Connected with result code ' + str(rc))
+    print('Connected to MQTT on ' + str(MQTT_SERVER) + ':' + str(MQTT_PORT))
  
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
@@ -61,6 +61,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     message = msg.payload.decode('utf-8')
     data = json.loads(message)
+    # print(data)
 
     action_type = data.get('type', None)
     callback = switch_action(action_type)

@@ -20,7 +20,6 @@ def initialize_device(data):
         cursor.execute(query, (deviceID,))
         result = cursor.fetchall()
         if result:
-            print("EXISTS")
             closeDB(conn, cursor)
             return
 
