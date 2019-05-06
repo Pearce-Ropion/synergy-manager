@@ -7,6 +7,7 @@ from .database import connectDB, closeDB
 epoch = datetime(1970,1,1)
 
 def initialize_device(data):
+    print("FOO")
     deviceID = data.get('deviceID', None)
     if deviceID is None:
         reportError('An error occurred getting the deviceID from the monitoring device')
@@ -18,8 +19,8 @@ def initialize_device(data):
     try:
         query = ''' SELECT id FROM devices WHERE deviceID = %s '''
         cursor.execute(query, (deviceID,))
-        data = cursor.fetchall()
-        if data:
+        result = cursor.fetchall()
+        if result:
             print("EXISTS")
             closeDB(conn, cursor)
             return
@@ -38,14 +39,15 @@ def initialize_device(data):
         now = datetime.now()
         timestamp_micros = (now - epoch) // timedelta(microseconds=1)
         timestamp_millis = timestamp_micros // 1000
+        timestamp = epoch + timedelta(milliseconds=timestamp_millis)
 
-        device_insert_variables = [deviceID, len(channels), timestamp_millis, timestamp_millis]
+        device_insert_variables = [deviceID, len(channels), timestamp, timestamp]
         device_col_list = ['deviceID', 'channels', 'created', 'updated']
 
         for channelID in channels:
 
             try:
-                channel_insert_variables = [deviceID, channelID, timestamp_millis, timestamp_millis]
+                channel_insert_variables = [deviceID, channelID, timestamp, timestamp]
                 channel_col_list = ['deviceID', 'channelID', 'created', 'updated']
                 
                 channel_query_placeholders = ', '.join(['%s'] * len(channel_insert_variables))

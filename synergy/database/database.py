@@ -7,7 +7,7 @@ from ..reporter import reportError, isError
 config = {
     'user': 'synergy',
     'password': 'wonderland',
-    'host': '192.168.0.39',
+    'host': 'localhost',
     'port': 3306,
     'database': 'synergy',
     'raise_on_warnings': True
