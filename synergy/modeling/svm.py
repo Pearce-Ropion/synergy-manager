@@ -2,7 +2,7 @@ import pandas as pd
 import pickle
 from sklearn import svm
 
-from .svm_handler import trim_time
+from .utils import trim_time
 from .send_sms import unusual_msg
 from ..database.database import connectDB, closeDB
 from ..reporter import reportError, isError
