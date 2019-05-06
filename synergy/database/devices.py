@@ -7,7 +7,6 @@ from .database import connectDB, closeDB
 epoch = datetime(1970,1,1)
 
 def initialize_device(data):
-    print("FOO")
     deviceID = data.get('deviceID', None)
     if deviceID is None:
         reportError('An error occurred getting the deviceID from the monitoring device')
@@ -21,7 +20,6 @@ def initialize_device(data):
         cursor.execute(query, (deviceID,))
         result = cursor.fetchall()
         if result:
-            print("EXISTS")
             closeDB(conn, cursor)
             return
 
